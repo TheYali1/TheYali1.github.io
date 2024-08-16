@@ -135,6 +135,78 @@
                 <input type="checkbox" name="software" value="React">
                 <span></span> React
             </label>
+            <label>
+                <input type="checkbox" name="software" value="steam">
+                <span></span> Steam
+            </label>
+            <label>
+                <input type="checkbox" name="software" value="discord">
+                <span></span> Discord
+            </label>
+            <label>
+                <input type="checkbox" name="software" value="epic games launcher">
+                <span></span> Epic Games Launcher
+            </label>
+            <label>
+                <input type="checkbox" name="software" value="notepad++">
+                <span></span> Notepad++
+            </label>
+            <label>
+                <input type="checkbox" name="software" value="skype">
+                <span></span> Skype
+            </label>
+            <label>
+                <input type="checkbox" name="software" value="zoom">
+                <span></span> Zoom
+            </label>
+            <label>
+                <input type="checkbox" name="software" value="teams">
+                <span></span> Teams
+            </label>
+            <label>
+                <input type="checkbox" name="software" value="google chrome">
+                <span></span> Google Chrome
+            </label>
+            <label>
+                <input type="checkbox" name="software" value="sharex">
+                <span></span> ShareX
+            </label>
+            <label>
+                <input type="checkbox" name="software" value="gimp">
+                <span></span> GIMP
+            </label>
+            <label>
+                <input type="checkbox" name="software" value="eartrumpet">
+                <span></span> EarTrumpet
+            </label>
+            <label>
+                <input type="checkbox" name="software" value="itunes">
+                <span></span> iTunes
+            </label>
+            <label>
+                <input type="checkbox" name="software" value="VLC">
+                <span></span> VLC
+            </label>
+            <label>
+                <input type="checkbox" name="software" value="notion">
+                <span></span> Notion
+            </label>
+            <label>
+                <input type="checkbox" name="software" value="opera">
+                <span></span> Opera
+            </label>
+            <label>
+                <input type="checkbox" name="software" value="opera gx">
+                <span></span> Opera GX
+            </label>
+            <label>
+                <input type="checkbox" name="software" value="brave">
+                <span></span> Brave
+            </label>
+            <label>
+                <input type="checkbox" name="software" value="obs">
+                <span></span> OBS
+            </label>
             <button type="button" id="exportBtn">ייצא</button>
         </form>
         <p id="result"></p>
@@ -150,6 +222,7 @@
             });
 
             if (selectedSoftwares.length > 0) {
+                document.getElementById('result').textContent = "בחרת את התוכנות
                 document.getElementById('result').textContent = "בחרת את התוכנות הבאות: " + selectedSoftwares.join(', ');
             } else {
                 document.getElementById('result').textContent = "לא נבחרו תוכנות.";
