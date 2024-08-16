@@ -15,33 +15,86 @@
 
         .container {
             margin-top: 50px;
+            width: 50%; /* הגדלת הרוחב */
+            margin-left: auto;
+            margin-right: auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
         }
 
         h1 {
             color: #333;
+            margin-bottom: 30px;
         }
 
         form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            display: inline-block;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
         }
 
         label {
             display: block;
-            margin: 10px 0;
+            margin: 15px 0;
+            font-size: 18px;
+            position: relative;
+            padding-left: 35px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /* עיצוב תיבות הסימון */
+        input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        input[type="checkbox"] + span {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 25px;
+            width: 25px;
+            background-color: #eee;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        label:hover input ~ span {
+            background-color: #ccc;
+        }
+
+        label input:checked ~ span {
+            background-color: #007bff;
+        }
+
+        label input:checked ~ span:after {
+            display: block;
+        }
+
+        label span:after {
+            content: "";
+            position: absolute;
+            display: none;
+            left: 9px;
+            top: 5px;
+            width: 8px;
+            height: 15px;
+            border: solid white;
+            border-width: 0 3px 3px 0;
+            transform: rotate(45deg);
         }
 
         button {
             margin-top: 20px;
-            padding: 10px 20px;
+            padding: 15px 30px;
             background-color: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 18px;
         }
 
         button:hover {
@@ -59,23 +112,29 @@
         <h1>בחר תוכנות לייצוא</h1>
         <form id="softwareForm">
             <label>
-                <input type="checkbox" name="software" value="Visual Studio Code"> Visual Studio Code
-            </label><br>
+                <input type="checkbox" name="software" value="Visual Studio Code">
+                <span></span> Visual Studio Code
+            </label>
             <label>
-                <input type="checkbox" name="software" value="Node.js"> Node.js
-            </label><br>
+                <input type="checkbox" name="software" value="Node.js">
+                <span></span> Node.js
+            </label>
             <label>
-                <input type="checkbox" name="software" value="Git"> Git
-            </label><br>
+                <input type="checkbox" name="software" value="Git">
+                <span></span> Git
+            </label>
             <label>
-                <input type="checkbox" name="software" value="Docker"> Docker
-            </label><br>
+                <input type="checkbox" name="software" value="Docker">
+                <span></span> Docker
+            </label>
             <label>
-                <input type="checkbox" name="software" value="Python"> Python
-            </label><br>
+                <input type="checkbox" name="software" value="Python">
+                <span></span> Python
+            </label>
             <label>
-                <input type="checkbox" name="software" value="React"> React
-            </label><br>
+                <input type="checkbox" name="software" value="React">
+                <span></span> React
+            </label>
             <button type="button" id="exportBtn">ייצא</button>
         </form>
         <p id="result"></p>
