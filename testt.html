@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>בחירת תוכנות לייצוא</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            display: inline-block;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>בחר תוכנות לייצוא</h1>
+        <form id="softwareForm">
+            <label>
+                <input type="checkbox" name="software" value="Visual Studio Code"> Visual Studio Code
+            </label><br>
+            <label>
+                <input type="checkbox" name="software" value="Node.js"> Node.js
+            </label><br>
+            <label>
+                <input type="checkbox" name="software" value="Git"> Git
+            </label><br>
+            <label>
+                <input type="checkbox" name="software" value="Docker"> Docker
+            </label><br>
+            <label>
+                <input type="checkbox" name="software" value="Python"> Python
+            </label><br>
+            <label>
+                <input type="checkbox" name="software" value="React"> React
+            </label><br>
+            <button type="button" id="exportBtn">ייצא</button>
+        </form>
+        <p id="result"></p>
+    </div>
+    
+    <script>
+        document.getElementById('exportBtn').addEventListener('click', function() {
+            const form = document.getElementById('softwareForm');
+            const selectedSoftwares = [];
+            
+            form.querySelectorAll('input[name="software"]:checked').forEach(checkbox => {
+                selectedSoftwares.push(checkbox.value);
+            });
+
+            if (selectedSoftwares.length > 0) {
+                document.getElementById('result').textContent = "בחרת את התוכנות הבאות: " + selectedSoftwares.join(', ');
+            } else {
+                document.getElementById('result').textContent = "לא נבחרו תוכנות.";
+            }
+        });
+    </script>
+</body>
+</html>
