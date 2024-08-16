@@ -31,7 +31,7 @@
 
         form {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            grid-template-columns: repeat(10, 1fr); /* 10 עמודות */
             gap: 10px;
             justify-items: start;
             align-items: center;
@@ -91,7 +91,7 @@
         }
 
         button {
-            grid-column: span 10;
+            grid-column: span 10; /* הכפתור יתפוס את כל העמודות */
             margin-top: 20px;
             padding: 15px 30px;
             background-color: #007bff;
@@ -109,7 +109,7 @@
         #result {
             margin-top: 20px;
             font-size: 18px;
-            grid-column: span 10;
+            grid-column: span 10; /* הפלט יתפוס את כל העמודות */
         }
     </style>
 </head>
