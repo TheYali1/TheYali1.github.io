@@ -54,8 +54,8 @@
             position: absolute;
             top: 0;
             left: 0;
-            height: 20px; /* שיפרתי את הגודל */
-            width: 20px; /* שיפרתי את הגודל */
+            height: 20px;
+            width: 20px;
             background-color: #eee;
             border-radius: 5px;
             transition: background-color 0.3s;
@@ -77,10 +77,10 @@
             content: "";
             position: absolute;
             display: none;
-            left: 7px; /* שיפרתי את המיקום */
-            top: 3px;  /* שיפרתי את המיקום */
-            width: 5px; /* שיפרתי את הגודל */
-            height: 10px; /* שיפרתי את הגודל */
+            left: 7px;
+            top: 3px;
+            width: 5px;
+            height: 10px;
             border: solid white;
             border-width: 0 2px 2px 0;
             transform: rotate(45deg);
@@ -111,102 +111,32 @@
     <div class="container">
         <h1>בחר תוכנות לייצוא</h1>
         <form id="softwareForm">
-            <label>
-                <input type="checkbox" name="software" value="Visual Studio Code">
-                <span></span> Visual Studio Code
-            </label>
-            <label>
-                <input type="checkbox" name="software" value="Node.js">
-                <span></span> Node.js
-            </label>
-            <label>
-                <input type="checkbox" name="software" value="Git">
-                <span></span> Git
-            </label>
-            <label>
-                <input type="checkbox" name="software" value="Docker">
-                <span></span> Docker
-            </label>
-            <label>
-                <input type="checkbox" name="software" value="Python">
-                <span></span> Python
-            </label>
-            <label>
-                <input type="checkbox" name="software" value="React">
-                <span></span> React
-            </label>
-            <label>
-                <input type="checkbox" name="software" value="steam">
-                <span></span> Steam
-            </label>
-            <label>
-                <input type="checkbox" name="software" value="discord">
-                <span></span> Discord
-            </label>
-            <label>
-                <input type="checkbox" name="software" value="epic games launcher">
-                <span></span> Epic Games Launcher
-            </label>
-            <label>
-                <input type="checkbox" name="software" value="notepad++">
-                <span></span> Notepad++
-            </label>
-            <label>
-                <input type="checkbox" name="software" value="skype">
-                <span></span> Skype
-            </label>
-            <label>
-                <input type="checkbox" name="software" value="zoom">
-                <span></span> Zoom
-            </label>
-            <label>
-                <input type="checkbox" name="software" value="teams">
-                <span></span> Teams
-            </label>
-            <label>
-                <input type="checkbox" name="software" value="google chrome">
-                <span></span> Google Chrome
-            </label>
-            <label>
-                <input type="checkbox" name="software" value="sharex">
-                <span></span> ShareX
-            </label>
-            <label>
-                <input type="checkbox" name="software" value="gimp">
-                <span></span> GIMP
-            </label>
-            <label>
-                <input type="checkbox" name="software" value="eartrumpet">
-                <span></span> EarTrumpet
-            </label>
-            <label>
-                <input type="checkbox" name="software" value="itunes">
-                <span></span> iTunes
-            </label>
-            <label>
-                <input type="checkbox" name="software" value="VLC">
-                <span></span> VLC
-            </label>
-            <label>
-                <input type="checkbox" name="software" value="notion">
-                <span></span> Notion
-            </label>
-            <label>
-                <input type="checkbox" name="software" value="opera">
-                <span></span> Opera
-            </label>
-            <label>
-                <input type="checkbox" name="software" value="opera gx">
-                <span></span> Opera GX
-            </label>
-            <label>
-                <input type="checkbox" name="software" value="brave">
-                <span></span> Brave
-            </label>
-            <label>
-                <input type="checkbox" name="software" value="obs">
-                <span></span> OBS
-            </label>
+            <!-- כל התוכנות שהוספנו מהרשימה -->
+            <label><input type="checkbox" name="software" value="Visual Studio Code"><span></span> Visual Studio Code</label>
+            <label><input type="checkbox" name="software" value="Node.js"><span></span> Node.js</label>
+            <label><input type="checkbox" name="software" value="Git"><span></span> Git</label>
+            <label><input type="checkbox" name="software" value="Docker"><span></span> Docker</label>
+            <label><input type="checkbox" name="software" value="Python"><span></span> Python</label>
+            <label><input type="checkbox" name="software" value="React"><span></span> React</label>
+            <label><input type="checkbox" name="software" value="steam"><span></span> Steam</label>
+            <label><input type="checkbox" name="software" value="discord"><span></span> Discord</label>
+            <label><input type="checkbox" name="software" value="epic games launcher"><span></span> Epic Games Launcher</label>
+            <label><input type="checkbox" name="software" value="notepad++"><span></span> Notepad++</label>
+            <label><input type="checkbox" name="software" value="skype"><span></span> Skype</label>
+            <label><input type="checkbox" name="software" value="zoom"><span></span> Zoom</label>
+            <label><input type="checkbox" name="software" value="teams"><span></span> Teams</label>
+            <label><input type="checkbox" name="software" value="google chrome"><span></span> Google Chrome</label>
+            <label><input type="checkbox" name="software" value="sharex"><span></span> ShareX</label>
+            <label><input type="checkbox" name="software" value="gimp"><span></span> GIMP</label>
+            <label><input type="checkbox" name="software" value="eartrumpet"><span></span> EarTrumpet</label>
+            <label><input type="checkbox" name="software" value="itunes"><span></span> iTunes</label>
+            <label><input type="checkbox" name="software" value="VLC"><span></span> VLC</label>
+            <label><input type="checkbox" name="software" value="notion"><span></span> Notion</label>
+            <label><input type="checkbox" name="software" value="opera"><span></span> Opera</label>
+            <label><input type="checkbox" name="software" value="opera gx"><span></span> Opera GX</label>
+            <label><input type="checkbox" name="software" value="brave"><span></span> Brave</label>
+            <label><input type="checkbox" name="software" value="obs"><span></span> OBS</label>
+
             <button type="button" id="exportBtn">ייצא</button>
         </form>
         <p id="result"></p>
@@ -221,8 +151,10 @@
                 selectedSoftwares.push(checkbox.value);
             });
 
+            // בדיקה בקונסול אם הלחיצה על הכפתור פועלת
+            console.log("כפתור ייצא נלחץ");
+            
             if (selectedSoftwares.length > 0) {
-                document.getElementById('result').textContent = "בחרת את התוכנות
                 document.getElementById('result').textContent = "בחרת את התוכנות הבאות: " + selectedSoftwares.join(', ');
             } else {
                 document.getElementById('result').textContent = "לא נבחרו תוכנות.";
