@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">KeyForge - Password Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Assistant', sans-serif;
+            font-weight: 800; /* ExtraBold */
+            background-color: #121212; /* רקע שחור עמוק */
+            display: flex;
+            flex-direction: column; /* כדי שנוכל למקם את בורר השפה למעלה */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #E0E0E0; /* צבע טקסט אפור בהיר */
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-x: hidden; /* למנוע גלילה אופקית אם אנימציה יוצאת מהמסך */
+        }
+        .container {
+            background: #1E1E1E; /* רקע קונטיינר כהה יותר */
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7); /* צל עמוק יותר */
+            padding: 40px;
+            text-align: center; /* כדי ליישר את הטקסטים והכותרות שבפנים */
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            width: 100%;
+            max-width: 500px; /* מקסימום רוחב לשולחן עבודה */
+            border: 1px solid #333;
+            margin-top: 20px; /* רווח מהבורר שפה למעלה */
+            opacity: 0; /* מתחיל נסתר */
+            transform: scale(0.95) translateY(20px); /* מתחיל קטן וקצת למטה */
+            animation: fadeInScaleUp 0.8s ease-out forwards; /* אנימציית כניסה */
+        }
+        .container:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.9);
+        }
+
+        /* אנימציה לכניסת הקונטיינר */
+        @keyframes fadeInScaleUp {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        input, select { /* סגנון גם לאינפוט וגם לסלקט */
+            padding: 15px;
+            border: 1px solid #444;
+            border-radius: 10px;
+            width: calc(100% - 30px); /* תופס 100% פחות הפאדינג */
+            margin-bottom: 25px;
+            font-size: 18px;
+            color: #E0E0E0;
+            background-color: #2C2C2C;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        select {
+            appearance: none; /* מסתיר את החץ הדיפולטיבי של הסלקט */
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292%22%20height%3D%22292%22%3E%3Cpath%20fill%3D%22%23E0E0E0%22%20d%3D%22M287%2C197.31L146.7%2C57%2C6%2C197.31z%22%2F%3E%3C%2Fsvg%3E');
+            background-repeat: no-repeat;
+            background-position: right 15px center; /* ממקם את החץ בצד ימין */
+            background-size: 12px;
+            text-align: center;
+            text-align-last: center;
+            direction: ltr; /* ברירת מחדל ל-ltr */
+            padding-right: 40px; /* רווח כדי שהחץ לא יכנס לטקסט */
+            width: auto; /* רוחב אוטומטי כדי לא לתפוס 100% */
+            min-width: 120px; /* רוחב מינימלי שלא יהיה קטן מדי */
+        }
+        select option {
+            direction: ltr; /* לוודא שהאופציות מיושרות משמאל לימין */
+        }
+        input:focus, select:focus {
+            border-color: #6A1B9A;
+            box-shadow: 0 0 0 3px rgba(106, 27, 154, 0.5);
+        }
+        button {
+            font-family: 'Assistant', sans-serif; /* וודא שהפונט Assistant משמש לכפתורים */
+            font-weight: 800; /* ExtraBold */
+            padding: 16px 30px;
+            border: none;
+            border-radius: 10px;
+            background-color: #6A1B9A;
+            color: #FFFFFF;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out, transform 0.2s, box-shadow 0.2s; /* הוספתי box-shadow לטרנזישן */
+            font-size: 19px;
+            letter-spacing: 0.5px;
+            margin: 10px 5px;
+            outline: none; /* כדי שלא יופיע הריבוע המכוער בלחיצה */
+        }
+        button:hover {
+            background-color: #4A148C;
+            transform: translateY(-2px);
+        }
+        button:active { /* אנימציית לחיצה */
+            transform: translateY(0) scale(0.98);
+            box-shadow: 0 0 0 0 rgba(0,0,0,0); /* מבטל צל בלחיצה */
+        }
+
+        .message-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: #333;
+            color: #E0E0E0;
+            display: none;
+            text-align: center;
+            width: calc(100% - 30px); /* מותאם לרוחב הקונטיינר */
+            margin-inline: auto; /* למרכז */
+            opacity: 0; /* מתחיל נסתר לאנימציה */
+            transform: translateY(-10px); /* מתחיל קצת למעלה */
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out; /* אנימציית הופעה והיעלמות */
+        }
+        .message-box.show { /* קלאס להצגת ההודעה */
+            opacity: 1;
+            transform: translateY(0);
+            display: block; /* חשוב להחזיר לבלוק כדי שיופיע */
+        }
+        .message-box.error {
+            background-color: #D32F2F;
+            color: #FFF;
+        }
+        .message-box.success {
+            background-color: #388E3C;
+            color: #FFF;
+        }
+        h1 {
+            font-size: 2.8em;
+            margin-bottom: 25px;
+            color: #9C27B0;
+            text-shadow: 0 0 8px rgba(156, 39, 176, 0.5);
+        }
+        p {
+            font-size: 1.2em;
+            line-height: 1.7;
+            color: #BDBDBD;
+        }
+        .password-display {
+            margin-top: 30px;
+            background-color: #242424;
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid #3A3A3A;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
+            display: none;
+            word-break: break-all;
+            text-align: center;
+            opacity: 0; /* מתחיל נסתר */
+            transform: translateY(20px); /* מתחיל קצת למטה */
+            animation: slideUpFadeIn 0.5s ease-out forwards; /* אנימציית הופעה של הסיסמה */
+        }
+        .password-display.show { /* קלאס להצגת הסיסמה עם אנימציה */
+            opacity: 1;
+            transform: translateY(0);
+            display: block; /* חשוב להחזיר לבלוק */
+        }
+
+        /* אנימציה להופעת תיבת הסיסמה */
+        @keyframes slideUpFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .password-display h2 {
+            color: #76FF03;
+            font-size: 2em;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        .password-display p {
+            color: #BDBDBD;
+            font-size: 1.1em;
+            margin-bottom: 5px; /* פחות רווח מתחת לפסקה רגילה */
+        }
+        .password-display #crackTimeDisplay {
+            color: #BDBDBD; /* צבע אפור בהיר לטקסט */
+            font-size: 0.95em; /* גודל קצת קטן יותר */
+            margin-top: 15px; /* רווח מעל זמן הפריצה */
+            font-weight: normal; /* עובי רגיל, לא מודגש */
+        }
+        .language-selector-container {
+            position: absolute; /* מיקום מוחלט */
+            top: 20px; /* 20 פיקסלים מהקצה העליון */
+            right: 20px; /* 20 פיקסלים מהקצה הימני */
+            display: flex; /* כדי למקם את הדגלים בשורה */
+            gap: 10px; /* רווח בין הדגלים */
+            z-index: 10; /* ודא שהוא מעל הקונטיינר אם יש חפיפה */
+        }
+        .flag-button {
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .flag-button img {
+            width: 30px; /* גודל הדגל */
+            height: auto;
+            border-radius: 5px; /* פינות מעוגלות לדגל */
+            border: 1px solid #555; /* מסגרת עדינה */
+        }
+        .flag-button:hover {
+            opacity: 1;
+        }
+        .flag-button.active {
+            opacity: 1;
+            border: 2px solid #9C27B0; /* מסגרת בצבע סגול לדגל הפעיל */
+            border-radius: 5px;
+        }
+        /* התאמה למצב עברית - כיווניות טקסט */
+        .rtl {
+            direction: rtl;
+            text-align: right;
+        }
+        .rtl input, .rtl textarea { /* עכשיו כולל את כל סוגי האינפוט וטקסטאריאה */
+            text-align: right;
+        }
+        .rtl select {
+            text-align-last: right;
+            background-position: left 15px center; /* החץ עובר לצד שמאל בעברית */
+            padding-left: 40px; /* רווח לחץ */
+            padding-right: 15px; /* ביטול רווח מימין */
+        }
+        .rtl .language-selector-container {
+            left: 20px; /* בעברית, למקם בצד שמאל */
+            right: auto; /* לבטל את המיקום הימני */
+        }
+        .input-group {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* יישור לאמצע בתוך הקבוצה */
+            margin-bottom: 25px;
+            flex-wrap: wrap; /* כדי שהאלמנטים יירדו שורה במידת הצורך */
+            text-align: center; /* לוודא שהתוכן מיושר גם אם הוא יורד שורה */
+        }
+        .input-group label {
+            margin-inline-end: 15px; /* רווח בין הלייבל לאינפוט */
+            font-size: 1.1em;
+            color: #E0E0E0;
+            white-space: nowrap; /* מונע שבירת שורה בתווית */
+        }
+        .input-group input[type="number"] {
+            width: 80px; /* רוחב קטן יותר לאינפוט מספרים */
+            margin-bottom: 0; /* לבטל את המרווח התחתון הדיפולטיבי */
+            text-align: center;
+            flex-shrink: 0; /* מונע התכווצות יתר */
+        }
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* יישור לאמצע של כל פריטי הצ'קבוקס בטור */
+            margin-bottom: 20px;
+            gap: 15px; /* רווח בין הצ'קבוקסים */
+            padding-inline-start: 0; /* ביטלתי את ההזחה שהייתה לשמאל */
+            padding-inline-end: 0;
+            width: 100%; /* תופס את כל הרוחב */
+        }
+        .checkbox-group div {
+            display: flex;
+            align-items: center;
+            position: relative; /* למיקום התאמה אישית של הצ'קבוקס */
+            cursor: pointer;
+            font-size: 1.1em;
+            color: #BDBDBD;
+            /* הוספתי רוחב כדי שכל אחד מהם לא יתפרס על כל הרוחב וזה יישר אותם */
+            width: fit-content; /* רוחב לפי התוכן */
+            margin-inline: auto; /* מרכז כל שורת צ'קבוקס בפני עצמה */
+        }
+        /* Hidden default checkbox */
+        .checkbox-group input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        /* Custom checkbox style */
+        .checkmark {
+            height: 20px;
+            width: 20px;
+            background-color: #2C2C2C;
+            border: 2px solid #6A1B9A; /* צבע סגול יפה */
+            border-radius: 5px;
+            margin-inline-end: 10px;
+            flex-shrink: 0; /* מונע התכווצות של הריבוע */
+            position: relative;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        /* On hover */
+        .checkbox-group div:hover input ~ .checkmark {
+            background-color: #3A3A3A;
+        }
+
+        /* When the checkbox is checked */
+        .checkbox-group input:checked ~ .checkmark {
+            background-color: #6A1B9A; /* סגול כהה יותר כשהוא מסומן */
+            border-color: #6A1B9A;
+        }
+
+        /* Create the checkmark (indicator) when checked */
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+            left: 6px; /* מיקום ה-V */
+            top: 2px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 3px 3px 0;
+            transform: rotate(45deg);
+        }
+
+        /* Show the checkmark when checked */
+        .checkbox-group input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        /* התאמה לעברית - יישור צ'קבוקסים */
+        .rtl .checkbox-group {
+            align-items: center; /* יישור לאמצע גם בעברית */
+            padding-inline-end: 0; /* ביטול הזחה מימין */
+            padding-inline-start: 0; /* ביטול הזחה משמאל */
+        }
+        .rtl .checkbox-group div {
+            flex-direction: row-reverse; /* היפוך כיוון כדי שהצ'קבוקס יהיה מימין לטקסט */
+        }
+        .rtl .checkmark {
+            margin-inline-start: 10px; /* רווח בין הטקסט לצ'קבוקס מימין */
+            margin-inline-end: 0; /* לבטל מרווח משמאל */
+        }
+
+        /* --- Media Queries for Responsiveness --- */
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px; /* פחות רווחים בקצוות */
+            }
+            .container {
+                padding: 25px 20px; /* פדינג קטן יותר לצדדים */
+                border-radius: 15px; /* עיגול פחות דרמטי */
+                margin-top: 10px; /* פחות רווח מהבורר שפה */
+            }
+            h1 {
+                font-size: 2.2em; /* הקטנת כותרת ראשית */
+                margin-bottom: 20px;
+            }
+            p {
+                font-size: 1.05em; /* הקטנת טקסט רגיל */
+            }
+            input, select {
+                padding: 12px;
+                font-size: 16px;
+                margin-bottom: 20px;
+            }
+            button {
+                padding: 14px 25px;
+                font-size: 17px;
+                margin: 8px 4px;
+            }
+            .password-display {
+                padding: 20px;
+            }
+            .password-display h2 {
+                font-size: 1.8em;
+            }
+            .password-display p {
+                font-size: 1em;
+            }
+            .language-selector-container {
+                top: 10px;
+                right: 10px;
+            }
+            .rtl .language-selector-container {
+                left: 10px;
+                right: auto;
+            }
+            .flag-button img {
+                width: 25px; /* דגלים קטנים יותר */
+            }
+            .message-box {
+                padding: 12px;
+                font-size: 0.95em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px 15px; /* פדינג עוד יותר קטן לצדדים */
+                border-radius: 10px;
+                width: calc(100% - 20px); /* קונטיינר תופס כמעט את כל הרוחב */
+            }
+            h1 {
+                font-size: 1.6em; /* כותרת עוד יותר קטנה */
+                margin-bottom: 15px;
+            }
+            p {
+                font-size: 0.9em;
+            }
+            input, select {
+                padding: 10px;
+                font-size: 15px;
+                margin-bottom: 15px;
+                width: calc(100% - 20px); /* אינפוט תופס את כל הרוחב */
+            }
+            .input-group label {
+                font-size: 1em;
+                margin-inline-end: 10px;
+            }
+            .input-group input[type="number"] {
+                width: 60px; /* הקטנת רוחב שדה אורך סיסמה */
+            }
+            .checkbox-group div {
+                font-size: 1em;
+                width: 100%; /* כל שורת צ'קבוקס תופסת את כל הרוחב */
+                justify-content: center; /* יישור הטקסט והצ'קבוקס במרכז השורה */
+                margin-inline: 0; /* לבטל מרגין אוטומטי */
+            }
+            .checkmark {
+                height: 18px;
+                width: 18px;
+                margin-inline-end: 8px;
+            }
+            .checkmark:after {
+                left: 5px;
+                top: 2px;
+                width: 4px;
+                height: 8px;
+            }
+            button {
+                padding: 12px 20px;
+                font-size: 15px;
+                margin: 5px 3px;
+                width: calc(100% - 10px); /* כפתורים תופסים כמעט את כל הרוחב */
+            }
+            .password-display {
+                padding: 15px;
+            }
+            .password-display h2 {
+                font-size: 1.4em;
+            }
+            .password-display p {
+                font-size: 0.85em;
+            }
+            .language-selector-container {
+                top: 5px; /* עוד יותר למעלה */
+                right: 5px;
+            }
+            .rtl .language-selector-container {
+                left: 5px;
+                right: auto;
+            }
+            .flag-button img {
+                width: 22px; /* דגלים הכי קטנים */
+            }
+            .message-box {
+                padding: 10px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body class="ltr">
+    <div class="language-selector-container">
+        <button class="flag-button" onclick="setLanguage('en')">
+            <img src="https://flagcdn.com/us.svg" alt="English Flag">
+        </button>
+        <button class="flag-button" onclick="setLanguage('he')">
+            <img src="https://flagcdn.com/il.svg" alt="Hebrew Flag">
+        </button>
+    </div>
+
+    <div class="container">
+        <h1 id="mainTitle">KeyForge - Password Generator</h1>
+        <p id="descriptionText">
+            Generate strong and secure passwords instantly. Choose your desired length and character types.
+        </p>
+
+        <div class="input-group">
+            <label for="passwordLength" id="lengthLabel">Password Length:</label>
+            <input type="number" id="passwordLength" value="12" min="6" max="35">
+        </div>
+
+        <div class="checkbox-group">
+            <div onclick="document.getElementById('includeUppercase').click()">
+                <input type="checkbox" id="includeUppercase" checked>
+                <span class="checkmark"></span>
+                <label for="includeUppercase" id="uppercaseLabel">Include Uppercase Letters (A-Z)</label>
+            </div>
+            <div onclick="document.getElementById('includeLowercase').click()">
+                <input type="checkbox" id="includeLowercase" checked>
+                <span class="checkmark"></span>
+                <label for="includeLowercase" id="lowercaseLabel">Include Lowercase Letters (a-z)</label>
+            </div>
+            <div onclick="document.getElementById('includeNumbers').click()">
+                <input type="checkbox" id="includeNumbers" checked>
+                <span class="checkmark"></span>
+                <label for="includeNumbers" id="numbersLabel">Include Numbers (0-9)</label>
+            </div>
+            <div onclick="document.getElementById('includeSymbols').click()">
+                <input type="checkbox" id="includeSymbols">
+                <span class="checkmark"></span>
+                <label for="includeSymbols" id="symbolsLabel">Include Symbols (!@#$%^&*)</label>
+            </div>
+        </div>
+       
+        <button id="generateButton" onclick="generatePassword()">Generate Password</button>
+
+        <div id="messageBox" class="message-box"></div>
+
+        <div id="passwordDisplay" class="password-display">
+            <p id="generatedLabel"></p>
+            <h2 id="displayedPassword"></h2>
+            <p id="crackTimeDisplay"></p> <button id="copyDisplayedButton" onclick="copyDisplayedPassword()">Copy Password</button>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                pageTitle: 'KeyForge - Password Generator',
+                mainTitle: 'KeyForge - Password Generator',
+                descriptionText: 'Generate strong and secure passwords instantly. Choose your desired length and character types.',
+                lengthLabel: 'Password Length:',
+                uppercaseLabel: 'Include Uppercase Letters (A-Z)',
+                lowercaseLabel: 'Include Lowercase Letters (a-z)',
+                numbersLabel: 'Include Numbers (0-9)',
+                symbolsLabel: 'Include Symbols (!@#$%^&*)',
+                generateButton: 'Generate Password',
+                generateError: 'Please select at least one character type!',
+                generatedLabel: 'Your generated password is:',
+                crackTimePrefix: 'Estimated crack time: ',
+                lessThanSecond: 'less than a second',
+                seconds: '{{time}} seconds',
+                minutes: '{{time}} minutes',
+                hours: '{{time}} hours',
+                days: '{{time}} days',
+                years: '{{time}} years',
+                centuries: '{{time}} centuries',
+                millennia: '{{time}} millennia',
+                copyDisplayedButton: 'Copy Password',
+                copySuccess: 'Password copied to clipboard! Enjoy.',
+                copyFail: 'Copy failed. Please copy manually.',
+                copyNoSupport: 'Your browser does not support automatic copying. Please copy manually.',
+                unknownError: 'Unknown error.'
+            },
+            he: {
+                pageTitle: 'KeyForge - יוצר סיסמאות',
+                mainTitle: 'KeyForge - יוצר סיסמאות',
+                descriptionText: 'צור סיסמאות חזקות ומאובטחות ברגע. בחר את האורך וסוגי התווים הרצויים.',
+                lengthLabel: 'אורך סיסמה:',
+                uppercaseLabel: 'כלול אותיות גדולות (A-Z)',
+                lowercaseLabel: 'כלול אותיות קטנות (a-z)',
+                numbersLabel: 'כלול מספרים (0-9)',
+                symbolsLabel: 'כלול סימנים (!@#$%^&*)',
+                generateButton: 'צור סיסמה',
+                generateError: 'יאללה אחי, תבחר לפחות סוג תו אחד!',
+                generatedLabel: 'הסיסמה שנוצרה היא:',
+                crackTimePrefix: 'זמן פריצה משוער: ',
+                lessThanSecond: 'פחות משנייה',
+                seconds: '{{time}} שניות',
+                minutes: '{{time}} דקות',
+                hours: '{{time}} שעות',
+                days: '{{time}} ימים',
+                years: '{{time}} שנים',
+                centuries: '{{time}} מאות שנים',
+                millennia: '{{time}} אלפי שנים',
+                copyDisplayedButton: 'העתק סיסמה',
+                copySuccess: 'סיסמה הועתקה ללוח! תתחדש.',
+                copyFail: 'נכשל בהעתקה. נסה להעתיק ידנית.',
+                copyNoSupport: 'הדפדפן שלך לא תומך בהעתקה אוטומטית. אנא העתק ידנית.',
+                unknownError: 'שגיאה לא ידועה.'
+            }
+        };
+
+        function setLanguage(lang) {
+            const currentLang = lang || localStorage.getItem('keyforgeLang') || 'en';
+            localStorage.setItem('keyforgeLang', currentLang);
+            const t = translations[currentLang];
+
+            document.getElementById('pageTitle').innerText = t.pageTitle;
+            document.getElementById('mainTitle').innerText = t.mainTitle;
+            document.getElementById('descriptionText').innerText = t.descriptionText;
+            document.getElementById('lengthLabel').innerText = t.lengthLabel;
+            document.getElementById('uppercaseLabel').innerText = t.uppercaseLabel;
+            document.getElementById('lowercaseLabel').innerText = t.lowercaseLabel;
+            document.getElementById('numbersLabel').innerText = t.numbersLabel;
+            document.getElementById('symbolsLabel').innerText = t.symbolsLabel;
+            document.getElementById('generateButton').innerText = t.generateButton;
+            document.getElementById('generatedLabel').innerText = t.generatedLabel;
+            document.getElementById('copyDisplayedButton').innerText = t.copyDisplayedButton;
+            
+            // עדכון זמן הפריצה אם הוא מוצג
+            const crackTimeDisplay = document.getElementById('crackTimeDisplay');
+            if (crackTimeDisplay.innerText) {
+                crackTimeDisplay.innerText = ''; 
+            }
+
+
+            const body = document.body;
+            if (currentLang === 'he') {
+                body.classList.remove('ltr');
+                body.classList.add('rtl');
+            } else {
+                body.classList.remove('rtl');
+                body.classList.add('ltr');
+            }
+            
+            document.querySelectorAll('.flag-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            const activeFlagAlt = currentLang === 'en' ? 'English Flag' : 'Hebrew Flag';
+            const activeFlagButton = document.querySelector(`.flag-button img[alt="${activeFlagAlt}"]`);
+            if (activeFlagButton) {
+                activeFlagButton.parentNode.classList.add('active');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('keyforgeLang');
+            setLanguage(savedLang); 
+
+            const passwordLengthInput = document.getElementById('passwordLength');
+            // שינוי מ-'input' ל-'change'
+            passwordLengthInput.addEventListener('change', function() {
+                let value = parseInt(this.value);
+                const min = parseInt(this.min);
+                const max = parseInt(this.max);
+
+                if (isNaN(value)) {
+                    this.value = min; 
+                } else if (value < min) {
+                    this.value = min;
+                } else if (value > max) {
+                    this.value = max;
+                }
+            });
+        });
+
+        function showMessage(messageKey, type, replacements = {}) {
+            const msgBox = document.getElementById('messageBox');
+            let message = translations[localStorage.getItem('keyforgeLang') || 'en'][messageKey];
+            
+            for (const key in replacements) {
+                message = message.replace(`{{${key}}}`, replacements[key]);
+            }
+
+            msgBox.innerText = message;
+            msgBox.className = 'message-box ' + type; // Reset classes and add new type
+            msgBox.classList.add('show'); // Add 'show' class to trigger animation
+
+            // Hide after 5 seconds, removing the 'show' class
+            setTimeout(() => {
+                msgBox.classList.remove('show');
+                // Use a small delay before setting display: none to allow fade-out
+                setTimeout(() => {
+                    msgBox.style.display = 'none';
+                }, 300); // Should match CSS transition time
+            }, 5000);
+        }
+
+        // פונקציה לחישוב זמן הפריצה
+        function calculateCrackTime(password, characterSet) {
+            const t = translations[localStorage.getItem('keyforgeLang') || 'en'];
+            const passwordLength = BigInt(password.length);
+            const characterSetSize = BigInt(characterSet.length);
+
+            if (passwordLength === 0n || characterSetSize === 0n) {
+                return t.unknownError;
+            }
+
+            // קצב ניחושים: 10 מיליארד ניסיונות בשנייה (10 * 10^9)
+            const guessesPerSecond = 10000000000n; 
+
+            // חישוב מספר השילובים האפשריים (אורך סט התווים בחזקת אורך הסיסמה)
+            let totalCombinations = characterSetSize ** passwordLength;
+           
+            // חישוב זמן הפריצה בשניות כ-BigInt
+            let crackTimeSecondsBigInt = totalCombinations / guessesPerSecond;
+
+            // הגדרת יחידות זמן כ-BigInt
+            const ONE_SECOND = 1n;
+            const ONE_MINUTE = 60n;
+            const ONE_HOUR = 3600n;
+            const ONE_DAY = 86400n;
+            const ONE_YEAR = 31536000n; // 365 ימים בשנה
+            const ONE_CENTURY = ONE_YEAR * 100n;
+            const ONE_MILLENNIUM = ONE_YEAR * 1000n;
+
+            // טיפול במקרה של 0 או קרוב ל-0 (פחות משנייה)
+            if (crackTimeSecondsBigInt < ONE_SECOND) {
+                return t.crackTimePrefix + t.lessThanSecond;
+            } 
+            // בדיקת דקות
+            else if (crackTimeSecondsBigInt < ONE_HOUR) {
+                const minutes = crackTimeSecondsBigInt / ONE_MINUTE;
+                return t.crackTimePrefix + t.minutes.replace('{{time}}', Number(minutes));
+            } 
+            // בדיקת שעות
+            else if (crackTimeSecondsBigInt < ONE_DAY) {
+                const hours = crackTimeSecondsBigInt / ONE_HOUR;
+                return t.crackTimePrefix + t.hours.replace('{{time}}', Number(hours));
+            } 
+            // בדיקת ימים
+            else if (crackTimeSecondsBigInt < ONE_YEAR) {
+                const days = crackTimeSecondsBigInt / ONE_DAY;
+                return t.crackTimePrefix + t.days.replace('{{time}}', Number(days));
+            } 
+            // בדיקת שנים
+            else if (crackTimeSecondsBigInt < ONE_CENTURY) {
+                const years = crackTimeSecondsBigInt / ONE_YEAR;
+                return t.crackTimePrefix + t.years.replace('{{time}}', Number(years));
+            } 
+            // בדיקת מאות שנים
+            else if (crackTimeSecondsBigInt < ONE_MILLENNIUM) {
+                const centuries = crackTimeSecondsBigInt / ONE_CENTURY;
+                return t.crackTimePrefix + t.centuries.replace('{{time}}', Number(centuries));
+            } 
+            // טיפול באלפי שנים ומעלה - נציג מספר גדול עם +
+            else {
+                const millennia = crackTimeSecondsBigInt / ONE_MILLENNIUM;
+                if (millennia > BigInt(Number.MAX_SAFE_INTEGER)) { 
+                     return t.crackTimePrefix + t.millennia.replace('{{time}}', '99999+'); 
+                }
+                return t.crackTimePrefix + t.millennia.replace('{{time}}', Number(millennia) + '+');
+            }
+        }
+
+
+        function generatePassword() {
+            const length = parseInt(document.getElementById('passwordLength').value);
+            const includeUppercase = document.getElementById('includeUppercase').checked;
+            const includeLowercase = document.getElementById('includeLowercase').checked;
+            const includeNumbers = document.getElementById('includeNumbers').checked;
+            const includeSymbols = document.getElementById('includeSymbols').checked;
+
+            let characters = '';
+            if (includeUppercase) characters += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            if (includeLowercase) characters += 'abcdefghijklmnopqrstuvwxyz';
+            if (includeNumbers) characters += '0123456789';
+            if (includeSymbols) characters += '!@#$%^&*()_+~`|}{[]:;?><,./-=';
+
+            if (characters.length === 0) {
+                showMessage('generateError', 'error');
+                // לוודא שהתיבה של הסיסמה נסתרת אם יש שגיאה
+                document.getElementById('passwordDisplay').classList.remove('show');
+                document.getElementById('passwordDisplay').style.display = 'none';
+                return;
+            }
+
+            let password = '';
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * characters.length);
+                password += characters[randomIndex];
+            }
+
+            document.getElementById('displayedPassword').innerText = password;
+            // הוספת קלאס 'show' כדי להפעיל את האנימציה
+            document.getElementById('passwordDisplay').style.display = 'block'; // Ensure it's block before adding show
+            requestAnimationFrame(() => { // Use rAF to ensure display:block is applied before animation
+                document.getElementById('passwordDisplay').classList.add('show');
+            });
+            
+
+            // חישוב והצגת זמן הפריצה
+            const crackTime = calculateCrackTime(password, characters);
+            document.getElementById('crackTimeDisplay').innerText = crackTime;
+        }
+
+        function copyDisplayedPassword() {
+            const passwordToCopy = document.getElementById('displayedPassword').innerText;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(passwordToCopy)
+                    .then(() => {
+                        showMessage('copySuccess', 'success');
+                    })
+                    .catch(err => {
+                        console.error('Copy failed:', err);
+                        showMessage('copyFail', 'error');
+                    });
+            } else {
+                showMessage('copyNoSupport', 'error');
+            }
+        }
+    </script>
+</body>
+</html>
